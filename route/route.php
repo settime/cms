@@ -35,3 +35,13 @@ Route::any('admin/menu/index','admin/Menu/index');
 Route::any('admin/menu/index','admin/menu/index');
 Route::any('admin/menu/index','admin/menu/index');
 Route::any('admin/menu/index','admin/menu/index');
+
+//日志
+Route::get('admin/logAdmin','admin/log/logAdmin');
+
+
+/**
+ * API 接口
+ */
+
+Route::post('api/logAdmin','api/log/logAdmin');

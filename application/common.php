@@ -54,3 +54,21 @@ function receiveForm(array $formName){
     }
     return $result;
 }
+
+/**
+ * @param array $data
+ * @param $field
+ * @return string
+ * 二维数组转str
+ */
+function twoArrToStr(array $data ,$field){
+    $str = '';
+    if(!$data){
+        return $str;
+    }
+    foreach ($data as $v){
+        $str .= $v[$field].',';
+    }
+
+    return rtrim($str,',');
+}

@@ -1,0 +1,104 @@
+{extend name="base/base" /}
+{block name="content"}
+
+<div class="layui-fluid">
+    <form class='layui-form' id="formData">
+        <div class="demoTable">
+            <div class="layui-form-item">
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员ID:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="uid" id="searchUid" autocomplete="off" class="layui-input"
+                               value="{$uid}">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户名:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" id="searchUsername" autocomplete="off" class="layui-input"
+                               value="{$username}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="startDate" autocomplete="off" class="layui-input" id="startDate"
+                               placeholder="" value="{$startDate}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="overDate" autocomplete="off" class="layui-input" id="overDate"
+                               placeholder="" value="{$overDate}">
+                    </div>
+                </div>
+            </div>
+
+            <button class="layui-btn" data-type="reload">搜索</button>
+            <button class="layui-btn" data-type="reload" type="button" id='remove'>清除筛选</button>
+        </div>
+    </form>
+    <table class="layui-hide" id="test" lay-filter="demoEvent">
+
+    </table>
+</div>
+
+<script>
+    layui.use('table', function(){
+        var table = layui.table
+            ,form = layui.form,
+            layer = layui.layer;
+
+        table.render({
+            elem: '#test'
+            ,url:'/api/logAdmin'
+            ,method:"post",
+            where: {
+                uid: '{$uid}',
+                username: '{$username}',
+                startDate: '{$startDate}',
+                overDate: '{$overDate}',
+            },
+            cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [[
+                {field:'id', width:'10%', title: 'ID', sort: true}
+                ,{field:'username', width:'10%', title: '用户名',sort: true}
+                ,{field:'date', title:'时间', width:'10%',sort:true}
+                ,{field:'log', title:'日志'}
+                ,{field:'ip', title:'IP'}
+            ]]
+            ,page:true
+
+        });
+
+    });
+</script>
+
+
+<script>
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#startDate'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#overDate'
+            , type: 'datetime'
+        });
+    })
+
+    $("#remove").click(function () {
+        $("#searchUid").val('');
+        $("#searchUsername").val('');
+        $("#startDate").val('');
+        $("#overDate").val('');
+        $("#formData").submit();
+    })
+</script>
+
+{/block}
