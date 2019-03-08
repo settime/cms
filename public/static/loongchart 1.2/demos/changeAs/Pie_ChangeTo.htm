@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>LoongChart入门教程Demo-Pie_ChangeTo</title>
+    <script type="text/javascript" src="../../excanvas.js"></script>
+    <script type="text/javascript" src="../../loongchart.core.js"></script>
+    <script type="text/javascript" src="../../loongchart.all.delay.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var data = [
+                { text: 'C', value: 17.855 },
+                { text: 'Java', value: 17.417 },
+                { text: 'Objective-C', value: 10.283 },
+                { text: 'C++', value: 9.140 },
+                { text: 'C#', value: 6.196 },
+                { text: 'PHP', value: 5.546 },
+                { text: 'Visual Basic', value: 4.749 },
+                { text: 'Python', value: 4.173 },
+                { text: 'Perl', value: 2.264 },
+                { text: 'Javascript', value: 1.976 },
+                { text: 'Others', value: 20.401 }
+            ];
+            var options = {
+                animation: true,
+                title: { content: 'Programming Language Ranking List in January 2013.' },
+                subTitle: { content: 'Here\'s Top Ten Languages.' },
+                legend: { sidelength: 10, fontsize: 13, enablecontrol: true, type: 'row', placeY: 'top' },
+                tip: { content: function (data) { return '<div>' + data.text + '<br/>value：' + data.value.toString() + '<br/>percent：' + data.percent.toFixed(3) + '%</div>'; } }
+            };
+
+            window.lchart = new LChart.Pie('divCanvas', 'CN');
+            lchart.SetSkin('BlackAndWhite');
+            lchart.SetOptions(options);
+            lchart.Draw(data);
+        };
+        function changeas() {
+            var newtype = document.getElementById('selChangeTo').value;
+            var options = {};
+            if (LChart.Const.DrawAxis.__contains(newtype)) {
+                //当转化为Polar时，内部选项的scaleOverlay会被赋值为true；此后再次转化为含坐标轴图形类型时，把scaleOverlay还原为false。
+                options.scaleOverlay = false;
+            }
+            else {
+                //将极图的scaleOverlay设置为true
+                options.scaleOverlay = true;
+            }
+            //newtype：被转化的目标图形类型
+            //options：在已有选项的基础上，补充或更新的选项
+            lchart.ChangeAs(newtype, options);
+        }
+    </script>
+</head>
+<body style="background-color: #F0F0F0;">
+    <div id="divCanvas" style="width: 800px; height: 400px;">
+    </div>
+    <br />
+    <span style="font-size: 14px; color: Red;">把Pie转化为：</span><select id="selChangeTo"
+        style="width: 200px;">
+        <option value="Pie">Pie</option>
+        <option value="Pie3D">Pie3D</option>
+        <option value="Ring">Ring</option>
+        <option value="Ring3D">Ring3D</option>
+        <option value="Bar">Bar</option>
+        <option value="Histogram">Histogram</option>
+        <option value="Histogram3D">Histogram3D</option>
+        <option value="Polar">Polar</option>
+        <option value="Polar3D">Polar3D</option>
+    </select>
+    <button onclick="changeas();">
+        转化
+    </button>
+    <button onclick="javascript:window.location.href='../../index.htm';">
+        返回
+    </button>
+</body>
+</html>
