@@ -29,19 +29,6 @@ class Category extends Auth
 
     public function index(){
         $result = receiveForm($this->form);
-
-        $cat = Db::name('category')->where('delete_time',0)->select();
-        $data =[];
-        foreach ($cat as $k=>$v){
-            $data[] = [
-                'name' => $v['name'],
-                'id'   => $v['id'],
-                'pId' => $v['pid'],
-                'open'  => true,
-            ];
-        }
-
-        $result['category'] = json_encode( $data);
         if(!$this->request->isAjax()){
             return $this->fetch('/category',$result);
         }

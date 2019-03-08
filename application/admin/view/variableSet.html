@@ -1,5 +1,6 @@
 {extend name="base/base" /}
 {block name="content"}
+
 <div class="layui-fluid">
     <form class='layui-form' id="formData">
         <div class="demoTable">
@@ -75,7 +76,7 @@
 
 <script>
     $(function () {
-        layui.use('table', function () {
+        layui.use(['table'], function () {
             table = layui.table
                 , form = layui.form,
                 layer = layui.layer;
@@ -97,6 +98,8 @@
                 ]]
                 , page: true
             });
+
+
         });
     })
 
@@ -110,9 +113,7 @@
         <div class="layui-input-inline">
             <select name="id" >
                 <option value=""></option>
-                {foreach $investSet as $v}
-                <option value="{$v.id}">{$v.name}</option>
-                {/foreach}
+
             </select>
         </div>
     </div>

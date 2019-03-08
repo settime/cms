@@ -33,12 +33,12 @@ class ClassTree
     /**
      * 横向分类树
      */
-    static public function hTree($arr, $pid = 0)
+    static public function hTree($arr, $pid = 0,$childField='son')
     {
         foreach ($arr as $k => $v) {
             if ($v['pid'] == $pid) {
                 $data[$v['id']] = $v;
-                $data[$v['id']]['son'] = self::hTree($arr, $v['id']);
+                $data[$v['id']][$childField] = self::hTree($arr, $v['id']);
             }
         }
         return isset($data) ? $data : array();

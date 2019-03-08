@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-03-02 23:26:23
+Date: 2019-03-08 10:11:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,25 +34,6 @@ CREATE TABLE `cms_admin` (
 
 -- ----------------------------
 -- Records of cms_admin
--- ----------------------------
-
--- ----------------------------
--- Table structure for `cms_admin_login_log`
--- ----------------------------
-DROP TABLE IF EXISTS `cms_admin_login_log`;
-CREATE TABLE `cms_admin_login_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL,
-  `ip` varchar(40) NOT NULL,
-  `country` varchar(100) NOT NULL COMMENT '国家',
-  `area` varchar(200) NOT NULL COMMENT '详细地址',
-  `type` int(11) NOT NULL COMMENT '1 登录,2退出',
-  `create_time` int(11) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员登录退出日志';
-
--- ----------------------------
--- Records of cms_admin_login_log
 -- ----------------------------
 
 -- ----------------------------
@@ -107,6 +88,61 @@ CREATE TABLE `cms_auth_rule` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `cms_category`
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_category`;
+CREATE TABLE `cms_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '类别组id',
+  `name` varchar(100) NOT NULL COMMENT '名称',
+  `sort` int(11) NOT NULL COMMENT '排序',
+  `is_enable` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `delete_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='类别表';
+
+-- ----------------------------
+-- Records of cms_category
+-- ----------------------------
+INSERT INTO `cms_category` VALUES ('1', '0', '文章', '1', '0', '0', '0');
+
+-- ----------------------------
+-- Table structure for `cms_log_admin`
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_log_admin`;
+CREATE TABLE `cms_log_admin` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `uid` int(10) unsigned NOT NULL COMMENT '管理员uid',
+  `ip` varchar(50) NOT NULL COMMENT '当前ip地址',
+  `create_time` int(10) unsigned NOT NULL COMMENT '登录时间',
+  `url` varchar(100) NOT NULL COMMENT '当前控制器/方法',
+  `log` text NOT NULL COMMENT '日志内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of cms_log_admin
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `cms_log_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_log_user`;
+CREATE TABLE `cms_log_user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `uid` int(10) unsigned NOT NULL COMMENT '用户id',
+  `status` tinyint(4) NOT NULL COMMENT '状态：1成功，-1失败,0仅仅提示',
+  `create_time` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `log` text NOT NULL COMMENT '日志内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户日志表，专门记录用户的踪迹。';
+
+-- ----------------------------
+-- Records of cms_log_user
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `cms_menu`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_menu`;
@@ -134,7 +170,6 @@ INSERT INTO `cms_menu` VALUES ('125', '0', '数据库管理', '', 'layui-icon-te
 INSERT INTO `cms_menu` VALUES ('9', '0', '设置', '', 'layui-icon-set', '0', '0');
 INSERT INTO `cms_menu` VALUES ('10', '0', '日志管理', '', 'layui-icon-read', '0', '0');
 INSERT INTO `cms_menu` VALUES ('11', '0', '权限管理', '', 'layui-icon-vercode', '0', '0');
-INSERT INTO `cms_menu` VALUES ('12', '0', '菜单管理', '', 'layui-icon-spread-left', '0', '0');
 INSERT INTO `cms_menu` VALUES ('13', '1', '控制台', 'console', '', '0', '1537334810');
 INSERT INTO `cms_menu` VALUES ('14', '2', '会员列表', 'userList', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('15', '3', '账户余额', 'record/balanceList', '', '0', '0');
@@ -158,18 +193,18 @@ INSERT INTO `cms_menu` VALUES ('35', '7', '发布新闻', 'news/addNews', '', '0
 INSERT INTO `cms_menu` VALUES ('36', '11', '后台管理员', 'admin/adminList', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('38', '11', '增加管理员', 'admin/addAdmin', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('39', '9', '变量配置', 'admin/variable/index', '', '0', '0');
-INSERT INTO `cms_menu` VALUES ('40', '9', '开关设置', 'set/switchSet', '', '0', '0');
+INSERT INTO `cms_menu` VALUES ('40', '9', '类别设置', 'admin/category/index', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('53', '4', '商品规格', 'goods/goodsAttributeList', '', '0', '1545115149');
 INSERT INTO `cms_menu` VALUES ('42', '10', '会员日志', 'log/userLog', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('43', '10', '会员登录日志', 'log/userLoginLogList', '', '0', '0');
-INSERT INTO `cms_menu` VALUES ('44', '10', '管理员日志', 'log/adminLogList', '', '0', '0');
+INSERT INTO `cms_menu` VALUES ('44', '10', '管理员日志', 'admin/logAdmin', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('52', '9', '修改密码', 'adminSet/updatePwd', '', '0', '1550637248');
 INSERT INTO `cms_menu` VALUES ('46', '10', '管理员登录日志', 'log/adminLoginLogList', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('47', '11', '角色列表', 'rules/roleList', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('48', '11', '添加角色', 'rules/addRole', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('49', '11', '编辑权限', 'rules/authList', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('50', '11', '添加权限', 'rules/addRules', '', '0', '0');
-INSERT INTO `cms_menu` VALUES ('51', '12', '菜单列表', 'menu/menuView', '', '0', '0');
+INSERT INTO `cms_menu` VALUES ('51', '9', '菜单设置', 'admin/menu/index', '', '0', '0');
 INSERT INTO `cms_menu` VALUES ('56', '0', '市场管理', '', 'layui-icon-cart', '1', '0');
 INSERT INTO `cms_menu` VALUES ('55', '0', '测试添加', '', '', '0', '1533174094');
 INSERT INTO `cms_menu` VALUES ('57', '56', '市场订单', 'record/market/marketList', '', '0', '0');
