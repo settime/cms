@@ -167,7 +167,13 @@
         </div>
         <div class="layui-col-md12">
             <div class="layui-card">
-                <div class="layui-card-header">数据概览</div>
+                <div class="layui-card-header layui-form">数据概览
+                    <form style="float: right" id="traffic">
+                         开始时间: <input type="text" id="startDate" name="startDate" style="min-width: 20px;max-width: 120px">
+                         结束时间: <input type="text" id="overDate" name="overDate" style="min-width: 20px;max-width: 120px">
+                        <button type="button" id="submitTraffic">确定</button>
+                    </form>
+                </div>
                 <div class="layui-card-body">
 
                     <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
@@ -304,34 +310,69 @@
 
 
 <script>
-    var site0 = [], site1 = [], labels = [];
-    for (var i = 0; i < 96; i++) {
-        site0.push(30 + parseInt(Math.random() * 70));
-        site1.push(70 + parseInt(Math.random() * 30));
-        if (i % 4 == 0) { labels.push((i / 4).toString() + ":00"); }
-    }
-    var data = [
-        { text: 'Site0', value: site0, color: '#000000', click: function(data, e) { alert('Click site0! value is:' + data.vvalue); }, mouseover: function(data, e) { alert('Mouse over site0! value is:' + data.vvalue); } },
-        { text: 'Site1', value: site1, color: '#f68f70' }
-    ];
 
-    var options = {
-        valueType: 'n', animationSteps: 30,
-        title: { content: '流量统计' },
-        node: { linecolor: "#f3cece", linewidth: 1 },
-        subTitle: { content: 'The data is apocryphal.' },
-        valueAxis: { linewidth: 1, verticalcomputeP: true, heap: true },
-        labelAxis: { labels: labels },
-        legend: { elementtype: "l" },
-        scale: { linewidth: 1, backcolors: ['rgba(12,67,255,0.2)', 'rgba(0,191,255,0.2)'] },
-        yAxisTitle: { content: 'Calculated by how many clicks by users.' },
-        tip: { merge: true },
-        footer: { content: 'MIIT Statistics.', fontcolor: '#f8d8d8' }
-    };
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#startDate'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#overDate'
+            , type: 'datetime'
+        });
+    })
 
-    window.lchart = new LChart.Line('demo', 'CN');
-    lchart.SetSkin('BlackAndWhite');
-    lchart.SetOptions(options);
-    lchart.Draw(data);
+
+    $('#submitTraffic').click(function () {
+        var formData = new FormData($('#traffic')[0]);
+        ajax.post('/trafficStatistics',formData,function (res) {
+             var site0 = eval(res.uv), site1 = eval(res.pv), labels = eval(res.date);
+            // for (var i = 0; i < 96; i++) {
+            //     site0.push(30 + parseInt(Math.random() * 70));
+            //     site1.push(70 + parseInt(Math.random() * 30));
+            //     if (i % 4 == 0) {
+            //         labels.push((i / 4).toString() + ":00");
+            //     }
+            // }
+
+
+            console.log(site0);
+            console.log(site1);
+            console.log(labels);
+
+            var data = [
+                {
+                    text: 'pv', value: site0, color: '#009688', click: function (data, e) {
+                        //   alert('Click site0! value is:' + data.vvalue);
+                    }, mouseover: function (data, e) {
+                        //alert('Mouse over site0! value is:' + data.vvalue);
+                    }
+                },
+                {text: 'uv', value: site1, color:'#45b1c1' }
+            ];
+
+            var options = {
+                valueType: 'n', animationSteps: 30,
+                title: {content: '流量统计'},//标题
+                node: {linecolor: "#f3cece", linewidth: 1},
+                subTitle: {content: 'The data is apocryphal.'},//小标题
+                valueAxis: {linewidth: 1, verticalcomputeP: true, heap: true,},
+                labelAxis: {labels: labels},//底部时间
+                legend: {elementtype: "l"},
+                scale: {linewidth: 1, backcolors: ['rgba(250,250,250,0.2)', 'rgba(255,255,255,0.2)']},//线大小,背景色
+                yAxisTitle: {content: ''},//侧标题
+                tip: {merge: true},
+                footer: {content: 'MIIT Statistics.', fontcolor: '#f8d8d8'}//
+            };
+
+            window.lchart = new LChart.Line('demo', 'CN');
+            lchart.SetSkin('BlackAndWhite');
+            lchart.SetOptions(options);
+            lchart.Draw(data);
+        })
+    })
+    $('#submitTraffic').click();
 </script>
 {/block}
