@@ -10,6 +10,8 @@ namespace app\api\controller;
 
 
 use app\Model\Category;
+use app\Service\Json;
+use app\Service\TrafficStatistics;
 
 class Sundry extends Auth
 {
@@ -25,7 +27,15 @@ class Sundry extends Auth
                 'open'  => true,
             ];
         }
-        return json_encode( $data);
+        return json_encode($data);
     }
 
+    public function trafficStatistics(){
+        $data = TrafficStatistics::getToday();
+
+        returnAjax(200,'成功',[
+           'uvData' => Json::jsonArrayField($data,'')
+        ]);
+        dump($data);exit;
+    }
 }

@@ -8,11 +8,11 @@
 
 namespace app\admin\controller;
 
+use app\library\ClassTree;
 use think\Db;
 
 class Menu extends Auth
 {
-
 
     /**
      * @return array
@@ -20,30 +20,25 @@ class Menu extends Auth
      */
     public function index()
     {
-        $data = Db::name('menu')->where('delete_time', 0)->order([
-            'sort' => 'desc',
-            'id' => 'asc',
-        ])->select();
+        $data = Db::name('menu')->where('delete_time', 0)->order(['sort' => 'desc', 'id' => 'asc'])
+            ->select();
 
-        $arr = [];
         foreach ($data as $k => $v) {
-            $arr[$k]['id'] = $v['id'];
-            $arr[$k]['name'] = $v['name'];
-            $arr[$k]['url'] = $v['url'];
-            //$arr[$k]['icon'] = $v['icon'];
-            $arr[$k]['pid'] = $v['pid'];
-            $arr[$k]['status'] =1;
+            $data[$k]['address'] = $v['url'];
+            unset($data[$k]['icon']);
+            unset($data[$k]['url']);
+            $data[$k]['open'] =true;
         }
         return $this->fetch('/menu', [
-            'menu' => $arr,
-            'data' => json_encode(array_values($arr)),
+            'menu' => ClassTree::hTree($data),
+            'data' => json_encode(array_values($data)),
         ]);
     }
 
     /**
      * @notc 添加菜单
      */
-    public function addMenu()
+    public function insert()
     {
         $form = ['pid', 'name', 'url', 'sort', 'icon'];
         $result = receiveForm($form);
@@ -56,22 +51,11 @@ class Menu extends Auth
     }
 
     /**
-     * @notc 菜单详情
-     */
-    public function menuDetail()
-    {
-        $id = input('id');
-        $data = Db::name('menu')->where('id', $id)->find();
-        returnAjax(200, '成功', $data);
-    }
-
-    /**
      * @notc 删除菜单
      */
-    public function deleteMenu()
+    public function delete()
     {
         $id = input('id');
-
         $menu = Db::name('menu')->where('id', $id)->where('delete_time', 0)->find();
         if ($menu) {
             Db::name('menu')->where('id|pid', $menu['id'])->update([
@@ -84,30 +68,28 @@ class Menu extends Auth
     /**
      * @notc 修改菜单
      */
-    public function editMenu(model\Menu $menuModel)
+    public function update()
+    {
+        $id = input('id/d');
+        returnAjax(400,'测');
+        $form = ['pid', 'name', 'url', 'sort', 'icon'];
+        $result = receiveForm($form);
+        if (!$result['name']) {
+            returnAjax(400,'请输入菜单名称');
+        }
+        Db::name('menu')->where('id',$id)->update($result);
+        returnAjax(200,'成功');
+    }
+
+
+    /**
+     * @notc 菜单详情
+     */
+    public function get()
     {
         $id = input('id');
-
-        if (!$id) {
-            $this->revert->fail('参数不正确');
-        }
-        $name = input('name');
-        $icon = input('icon');
-        $sort = input('sort');
-        $url = input('url');
-
-        if (!$name) {
-            $this->revert->fail('请输入菜单名称');
-        }
-        $menuModel->save([
-            'name' => $name,
-            'url' => $url,
-            'icon' => $icon,
-            'sort' => $sort,
-        ], ['id' => $id]);
-
-        $this->revert->success('', '成功');
-
+        $find = Db::name('menu')->where('id', $id)->find();
+        returnAjax(200, '成功', $find);
     }
 
 }

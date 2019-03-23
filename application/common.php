@@ -27,6 +27,10 @@ function returnAjax($status = 200, $msg = '', $res =[])
     exit;
 }
 
+function getVariableSet($key){
+    return  \app\Service\VariableSet::getValue($key);
+}
+
 /**
  * @return array
  * @throws \think\db\exception\DataNotFoundException
@@ -71,4 +75,13 @@ function twoArrToStr(array $data ,$field){
     }
 
     return rtrim($str,',');
+}
+
+function countIntervalTime($time1,$time2){
+    $totalTime = $time2 - $time1;
+    return $totalTime / 24;
+}
+
+function returnJsonStr($data){
+    return json_encode( array_values($data));
 }

@@ -15,33 +15,49 @@ use think\facade\Route;
  * 登录
  */
 Route::get('','admin/login/index');
-/**
- * 首页
- */
-Route::any('admin/home','admin/Home/index');
+Route::group('admin',function (){
+    /**
+     * 首页
+     */
+    Route::any('home','admin/Home/index');
+    Route::any('console','admin/Home/console');
 
-Route::any('admin/console','admin/Home/console');
+    //变量配置
+    Route::any('variable/index','admin/VariableSet/index');
+    Route::post('variable/create','admin/VariableSet/create');
+    Route::post('variable/update','admin/VariableSet/update');
+    Route::post('variable/delete','admin/VariableSet/delete');
+    Route::post('variable/get','admin/VariableSet/get');
 
-//变量配置
-Route::any('admin/variable/index','admin/VariableSet/index');
+    //类别配置
+    Route::any('category/index','admin/category/index');
+    Route::any('category/create','admin/category/create');
+    Route::any('category/index','admin/category/index');
 
-//变量配置
-Route::any('admin/category/index','admin/category/index');
-Route::any('admin/category/create','admin/category/create');
-Route::any('admin/category/index','admin/category/index');
+    //菜单
+    Route::any('menu/index','admin/Menu/index');
+    Route::any('menu/insert','admin/menu/insert');
+    Route::any('menu/delete','admin/menu/delete');
+    Route::any('menu/update','admin/menu/update');
+    Route::any('menu/get','admin/menu/get');
 
-//菜单
-Route::any('admin/menu/index','admin/Menu/index');
-Route::any('admin/menu/index','admin/menu/index');
-Route::any('admin/menu/index','admin/menu/index');
-Route::any('admin/menu/index','admin/menu/index');
+    //日志
+    Route::get('logAdmin','admin/log/logAdmin');
 
-//日志
-Route::get('admin/logAdmin','admin/log/logAdmin');
+    //文章
+    Route::any('article/index','admin/Article/index');
+    Route::any('article/insert','admin/Article/insert');
+    Route::any('article/delete','admin/Article/delete');
+    Route::any('article/update','admin/Article/udate');
+    Route::any('article/get','admin/Article/get');
+    Route::any('article/select','admin/Article/select');
+});
+
 
 
 /**
  * API 接口
  */
+Route::post('trafficStatistics','api/Sundry/trafficStatistics');
 
 Route::post('api/logAdmin','api/log/logAdmin');

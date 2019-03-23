@@ -6,15 +6,14 @@ function changeCode($this) {
 /**
  * 打开添加表单
  */
-function openAddFormData(id) {
-    console.log(11)
+function openView(id) {
     layer.open({
         type: 1,
         skin: 'layui-layer-rim',
         content: $('#' + id),
         area: ['80%', '80%'], //宽高
         success: function () {
-            $('.layui-layer-shade').css('display', 'none');
+            // $('.layui-layer-shade').css('display', 'none');
         }
     })
 }
@@ -23,15 +22,9 @@ $(function () {
     //执行登录
     $("#cms-login").click(function () {
         var formData = new FormData($('#cms-login-form')[0]);
-        console.log(11);
         //登录地址
-        console.log(ajax);
-        ajax.post('login', formData, function ($res) {
+        ajax.post('/login', formData, function ($res) {
             //登录成功处理
-        }, function ($error) {
-            //出错处理
-            console.log($error);
-            layer.msg()
         })
     })
 

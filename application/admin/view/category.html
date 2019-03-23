@@ -6,7 +6,7 @@
         font-family: "微软雅黑","宋体",Arial, "Times New Roman", Times, serif;
     }
     .ztree {
-        padding: 0;
+        padding: 0 !important;
         border-left: 1px solid #E3E3E3;
         border-right: 1px solid #E3E3E3;
         border-bottom: 1px solid #E3E3E3;
@@ -21,13 +21,13 @@
     }
     .ztree li a.curSelectedNode {
         padding-top: 0px;
-        background-color: #FFE6B0;
-        border: 1px #FFB951 solid;
+        background-color: #f2f2f2 !important;
+        border: 1px #f2f2f2 solid !important;
         opacity: 1;
         height: 32px;
     }
     .ztree li ul {
-        padding-left: 0px
+        padding-left: 0px !important;
     }
     .ztree div.divTd span {
         line-height: 30px;
@@ -49,21 +49,34 @@
         border-left: none;
     }
     .ztree .head {
-        background: #E8EFF5;
+        background: #f2f2f2;
     }
     .ztree .head div.divTd {
         color: #393939;
         font-weight: bold;
     }
-    .ztree .ck{
-        padding: 0 5px;
-        margin: 2px 3px 7px 3px;
-    }
+    /*.ztree .ck{*/
+        /*padding: 0 5px;*/
+        /*margin: 2px 3px 7px 3px;*/
+    /*}*/
     li:nth-child(odd){
-        background-color:#F5FAFA;
+        background-color:#fff;
     }
     li:nth-child(even){
         background-color:#FFFFFF;
+    }
+
+    .layui-btn {
+        height: 25px;
+        line-height: 25px;
+        padding: 0 16px !important;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px !important;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
     }
 </style>
 <link rel="stylesheet" href="/static/zTreeStyle/zTreeStyle.css">
@@ -76,7 +89,7 @@
                 <div class="layui-card">
 
                     <div class="layui-card-body" pad15>
-                        <button type="button" class="layui-btn" onclick="openAddFormData('cms-addForm')">添加菜单</button>
+                        <button type="button" style="margin-bottom: 15px" class="layui-btn" onclick="openView('cms-addForm')">添加类别</button>
                         <ul id="dataTree" class="ztree">
                         </ul>
                     </div>
@@ -86,13 +99,15 @@
     </div>
 
 </div>
+{/block}
+
+{block name='script'}
 
 <script>
     $(function () {
         layui.use(['table','treeSelect'], function () {
             table = layui.table
-                , form = layui.form,
-                layer = layui.layer;
+                , layer = layui.layer;
 
             table.render({
                 elem: '#data'
@@ -102,7 +117,6 @@
                 , cellMinWidth: 80
                 , cols: [[
                     {field: 'id', width: '10%', title: 'ID', sort: true}
-                    // , {field: 'cat_id', title: '类别', sort: true}
                     , {field: 'name', title: '名称'}
                     , {field: 'key', title: '标识'}
                     , {field: 'value', title: '值'}
@@ -111,87 +125,19 @@
                 ]]
                 , page: true
             });
-
-
-            var treeSelect= layui.treeSelect;
-
-            treeSelect.render({
-                // 选择器
-                elem: '#tree',
-                // 数据
-                data: '{$category}',
-                // 异步加载方式：get/post，默认get
-                type: 'get',
-                // 占位符
-                placeholder: '修改默认提示信息',
-                // 是否开启搜索功能：true/false，默认false
-                search: true,
-                // 点击回调
-                click: function(d){
-                    console.log(d);
-                },
-                // 加载完成后的回调函数
-                success: function (d) {
-                    console.log(d);
-//                选中节点，根据id筛选
-//                treeSelect.checkNode('tree', 3);
-
-//                获取zTree对象，可以调用zTree方法
-//                var treeObj = treeSelect.zTree('tree');
-//                console.log(treeObj);
-
-//                刷新树结构
-//                treeSelect.refresh();
-                }
-            });
-
         });
     })
 
 </script>
 
 
-<form id="addFormData" style="display: none">
 
-    <div class="layui-form-item"  style="margin-top: 20px ">
-        <label class="layui-form-label">标识名称</label>
-        <div class="layui-input-block">
-            <input name="idName" autocomplete="off" class="layui-input" type="text" >
-        </div>
-    </div>
-
-
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn" type="button" id="feng-btn" onclick="submitInsert()">立即提交</button>
-        </div>
-    </div>
-
-</form>
 <script src="/static/js/jquery.ztree.core.min.js"></script>
 <script>
     var newOpen =null;
     $(function () {
         //初始化数据
-        var data = [
-            {"id":"20170525091439001010","name":"企业注册","pId":null,"status":"1","typecode":"02"},
-            {"id":"20170724174119005610","name":"部门沟通演练","pId":"20170525091439001010","status":"1","typecode":"2"},
-            {"id":"20170725085455000110","name":"测试12","pId":null,"status":"1","typecode":"11"},
-            {"id":"20170731171011000410","name":"审批流程","pId":null,"status":"1","typecode":"222"},
-            {"id":"20170803133941018010","name":"单位登记","pId":null,"status":"1","typecode":"188"},
-            {"id":"20170804085419000110","name":"模拟","pId":null,"status":"1","typecode":"122"},
-            {"id":"20170809090321000110","name":"审批模拟（新）测试测试测试测试测试","pId":"20170525091439001010","status":"1","typecode":"110"},
-            {"id":"20170809105407009210","name":"测测测测测测测测测测测测测测测测测测","pId":"20170809090321000110","status":"1","typecode":"123"},
-            {"id":"20170814183837000210","name":"企业登记","pId":null,"status":"1","typecode":"111"},
-            {"id":"20170822183437000710","name":"单事项-部门沟通","pId":"20170814183837000210","status":"1","typecode":"822"},
-            {"id":"20170922112245000510","name":"23","pId":null,"status":"1","typecode":"03"},
-            {"id":"20170922143810000010","name":"sdfa","pId":null,"status":"1","typecode":"04"},
-            {"id":"20170922145203000110","name":"64526","pId":null,"status":"1","typecode":"34262"},
-            {"id":"20170922155403001610","name":"333","pId":null,"status":"1","typecode":"33354"},
-            {"id":"20170922171750000210","name":"4441234","pId":null,"status":"1","typecode":"44444"},
-            {"id":"20170925160636007410","name":"测试数据","pId":"20170731171011000410","status":"1","typecode":"231"},
-            {"id":"20170925163306007510","name":"23462111","pId":null,"status":"1","typecode":"2345"},
-            {"id":"20170925163959007610","name":"242345","pId":"20170922112245000510","status":"1","typecode":"3625346"}];
+        var data = {$category|raw};
         queryHandler(data);
     });
     var setting = {
@@ -201,7 +147,10 @@
         },
         data: {
             simpleData: {
-                enable: true
+                enable: true, //使用简单数据模式
+                idKey: "id", //节点数据中保存唯一标识的属性名称
+                pIdKey: "pid",//节点数据中保存其父节点唯一标识的属性名称
+//                        rootPId: "" //用于修正根节点父节点数据 默认值：null
             }
         }
     };
@@ -216,7 +165,7 @@
         var icoObj = $("#" + treeNode.tId + "_ico");
         var spanObj = $("#" + treeNode.tId + "_span");
         aObj.attr('title', '');
-        aObj.append('<div class="divTd swich fnt" style="width:60%"></div>');
+        aObj.append('<div class="divTd swich fnt" style="width:30%"></div>');
         var div = $(liObj).find('div').eq(0);
         //从默认的位置移除
         switchObj.remove();
@@ -233,9 +182,9 @@
         switchObj.after(icoObj);
         var editStr = '';
         //宽度需要和表头保持一致
-        editStr += '<div class="divTd" style="width:20%">' + (treeNode.typecode == null ? '' : treeNode.typecode ) + '</div>';
-        editStr += '<div class="divTd" style="width:10%">' + (treeNode.status == '1' ? '有效' : '无效' ) + '</div>';
-        editStr += '<div class="divTd" style="width:10%">' + opt(treeNode) + '</div>';
+        editStr += '<div class="divTd" style="width:30%">' + (treeNode.date) + '</div>';
+        editStr += '<div class="divTd" style="width:20%">' + (treeNode.sort ) + '</div>';
+        editStr += '<div class="divTd" style="width:20%">' + opt(treeNode) + '</div>';
         aObj.append(editStr);
     }
     //初始化列表
@@ -243,8 +192,8 @@
         //初始化树
         $.fn.zTree.init($("#dataTree"), setting, zTreeNodes);
         //添加表头
-        var li_head = ' <li class="head"><a><div class="divTd" style="width:60%">类型名称</div><div class="divTd" style="width:20%">类型编码</div>' +
-            '<div class="divTd" style="width:10%">是否有效</div><div class="divTd" style="width:10%">操作</div></a></li>';
+        var li_head = ' <li class="head"><a><div class="divTd" style="width:30%">名称</div><div class="divTd" style="width:30%">创建时间</div>' +
+            '<div class="divTd" style="width:20%">排序</div><div class="divTd" style="width:20%">操作</div></a></li>';
         var rows = $("#dataTree").find('li');
         if (rows.length > 0) {
             rows.eq(0).before(li_head)
@@ -255,52 +204,11 @@
     }
     function opt(treeNode) {
         var htmlStr = '';
-        htmlStr += '<input type="button" class="ck" onclick="doEdit(\'' + treeNode.tId + '\',\'' + treeNode.id + '\')" value="编辑"/>';
-        htmlStr += '<input type="button" class="ck" onclick="doDelete(\'' + treeNode.tId + '\',\'' + treeNode.id + '\', \'' + treeNode.name + '\')" value="删除"/>';
+        htmlStr += '<input type="button" class=" layui-btn" onclick="editMenu( ' + treeNode.id + ')" value="编辑"/>';
+        htmlStr += '<input type="button" class=" layui-btn layui-btn-danger" onclick="deleteMenu(' + treeNode.id + ' )" value="删除"/>';
         return htmlStr;
     }
 </script>
-
-
-
-<form id="cms-addForm" style="display: none;margin-top: 10px" class="layui-form">
-    <div class="layui-form-item">
-        <label class="layui-form-label">名称</label>
-        <div class="layui-input-inline">
-            <input type="text" name="name"  placeholder="请输入类别名称" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">分组选择框</label>
-            <div class="layui-input-inline">
-                <input type="text" id="tree" lay-filter="tree" class="layui-input">
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">sort</label>
-        <div class="layui-input-inline">
-            <input type="text" name="sort"  placeholder="请输入类别排序" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">是否启用</label>
-        <div class="layui-input-block">
-            <input type="radio" name="is_enable" value="启用" title="启用" checked="">
-            <input type="radio" name="is_enable" value="不启用" title="不启用">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn" type="button"   onclick="submitAddForm('/admin/category/create')">立即提交</button>
-        </div>
-    </div>
-</form>
 
 <script>
 
@@ -316,5 +224,69 @@
     }
 
 </script>
+{/block}
+
+
+
+{block name='form'}
+
+<form id="cms-addForm" style="display:none;margin-top: 10px" class="layui-form">
+
+    <div class="layui-form-item secondSelect" style="margin-top: 20px;">
+        <label class="layui-form-label">上级菜单</label>
+        <div class="layui-input-block">
+            <select name="pid"  value="" >
+                <option value="">顶级菜单</option>
+                {foreach $categoryTree as $k=>$v}
+                {if($v.son)}
+                <optgroup label="{$v.name}"  value="{$v.id}">
+                    {foreach $v.son as $key=>$val}
+                    <option value="{$val.id}">{$val.name}</option>
+                    {/foreach}
+                </optgroup>
+                {else}
+                <option value="{$v.id}">{$v.name}</option>
+                {/if}
+                {/foreach}
+
+                <option style="display: none" class="pid-value"></option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-inline">
+                <input type="text"  name="name" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">sort</label>
+        <div class="layui-input-inline">
+            <input type="text" name="sort"  placeholder="请输入类别排序" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否启用</label>
+        <div class="layui-input-block">
+            <input type="radio" name="is_enable" value="1" title="启用" checked="">
+            <input type="radio" name="is_enable" value="0" title="不启用">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" type="button"   onclick="submitAddForm('/admin/category/create')">立即提交</button>
+        </div>
+    </div>
+</form>
 
 {/block}
+
+
+

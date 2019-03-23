@@ -219,6 +219,7 @@
             //渲染
             for(let key in  res.res ){
                 $('#'+key).val(res.res[key]);
+                console.log(key)
             }
             form.render();
             openView('editFormData');
